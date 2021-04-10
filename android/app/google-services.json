@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1068133459100",
+    "project_id": "blocky-notes",
+    "storage_bucket": "blocky-notes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068133459100:android:88da32d1463ccc9365f959",
+        "android_client_info": {
+          "package_name": "org.mivoligo.blocky_notes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1068133459100-9pvm4b83c6q828kb43j12urf2truak84.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB10Y3wOVsBHJO325dcXPBUoTGREQavBks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1068133459100-9pvm4b83c6q828kb43j12urf2truak84.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
