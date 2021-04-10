@@ -1,0 +1,41 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
+
+class NoteEntity extends Equatable {
+  final String? id;
+  final String userId;
+  final String content;
+  final String color;
+  final Timestamp timestamp;
+
+  const NoteEntity({
+    this.id,
+    required this.userId,
+    required this.content,
+    required this.color,
+    required this.timestamp,
+  });
+
+  @override
+  List<Object?> get props => [id, userId, content, color, timestamp];
+
+  Map<String, dynamic> toDocument() {
+    return {
+      'userId': userId,
+      'content': content,
+      'color': color,
+      'timestamp': timestamp,
+    };
+  }
+
+  factory NoteEntity.fromSnapshot(DocumentSnapshot doc) {
+    final data = doc.data();
+    return NoteEntity(
+      id: doc.id,
+      userId: data?['userId'] ?? '',
+      content: data?['content'] ?? '',
+      color: data?['color'] ?? '#ffffff',
+      timestamp: data?['timestamp'],
+    );
+  }
+}
