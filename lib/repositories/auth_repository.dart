@@ -4,9 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import '../config/paths.dart';
 import '../entities/entities.dart';
 import '../models/models.dart';
-import 'auth_base_repository.dart';
+import 'base_auth_repository.dart';
 
-class AuthRepository extends AuthBaseRepository {
+class AuthRepository extends BaseAuthRepository {
   AuthRepository({
     FirebaseFirestore? firestore,
     auth.FirebaseAuth? firebaseAuth,
