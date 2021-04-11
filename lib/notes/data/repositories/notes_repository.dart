@@ -6,8 +6,8 @@ import '../models/models.dart';
 import 'base_notes_repository.dart';
 
 class NotesRepository extends BaseNotesRepository {
-  NotesRepository({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+  NotesRepository({FirebaseFirestore? firestore})
+      : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
   final Duration _timeoutDuration = Duration(seconds: 10);

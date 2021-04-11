@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'notes/notes_grid.dart';
+import 'notes/notes_page.dart';
 import 'user/blocs/auth_bloc/auth_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -32,10 +32,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              NotesGrid(
-                onTap: (_) {},
-                notes: [],
-              ),
+              NotesPage(),
             ],
           ),
         );
