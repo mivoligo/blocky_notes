@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
-import '../config/paths.dart';
-import '../entities/entities.dart';
-import '../models/models.dart';
+import '../../../../config/paths.dart';
+import '../../entities/entities.dart';
+import '../../models/models.dart';
 import 'base_auth_repository.dart';
 
 class AuthRepository extends BaseAuthRepository {
@@ -76,7 +76,4 @@ class AuthRepository extends BaseAuthRepository {
     final currentUser = await _firebaseAuth.currentUser;
     return currentUser?.isAnonymous ?? true;
   }
-
-  @override
-  void dispose() {}
 }

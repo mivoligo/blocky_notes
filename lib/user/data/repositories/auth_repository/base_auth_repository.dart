@@ -1,8 +1,6 @@
-import '../models/models.dart';
+import '../../models/models.dart';
 
-import 'base_repository.dart';
-
-abstract class BaseAuthRepository extends BaseRepository {
+abstract class BaseAuthRepository {
   Future<User> loginAnonymously();
 
   Future<User> signupWithEmailAndPassword({

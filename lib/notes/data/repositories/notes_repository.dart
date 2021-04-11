@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../config/paths.dart';
+import '../../../config/paths.dart';
 import '../entities/entities.dart';
 import '../models/models.dart';
-import 'repositories.dart';
+import 'base_notes_repository.dart';
 
 class NotesRepository extends BaseNotesRepository {
   NotesRepository({required FirebaseFirestore firestore})
@@ -52,7 +52,4 @@ class NotesRepository extends BaseNotesRepository {
             .toList()
               ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
   }
-
-  @override
-  void dispose() {}
 }
