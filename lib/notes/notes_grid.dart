@@ -35,7 +35,7 @@ class NotesGrid extends StatelessWidget {
               onTap: () => onTap(note),
               child: Card(
                 elevation: 4.0,
-                color: Colors.orange,
+                color: note.color,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),

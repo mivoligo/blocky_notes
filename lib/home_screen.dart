@@ -1,7 +1,7 @@
-import 'package:blocky_notes/notes/note_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'notes/note_details_page.dart';
 import 'notes/notes_page.dart';
 import 'user/blocs/auth_bloc/auth_bloc.dart';
 

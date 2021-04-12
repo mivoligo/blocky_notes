@@ -20,6 +20,12 @@ class NoteDetailsPage extends StatelessWidget {
 }
 
 class NoteDetailsView extends StatelessWidget {
+  NoteDetailsView({Key? key, this.note}) : super(key: key);
+
+  final Note? note;
+
+  bool get _isEditing => note != null;
+
   final List<HexColor> _colors = [
     HexColor('#E74C3C'),
     HexColor('#3498DB'),
@@ -32,11 +38,45 @@ class NoteDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<NoteDetailsCubit, NoteDetailsState>(
       listener: (context, state) {
-        // TODO: implement listener
+        if (state.status == NoteDetailsStatus.success) {
+          Navigator.of(context).pop();
+        } else if (state.status == NoteDetailsStatus.failure) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Error'),
+                content: Text(state.errorMessage),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            actions: [
+              _isEditing
+                  ? _ActionButton(
+                      text: 'Delete',
+                      color: Colors.red,
+                      onPressed: () =>
+                          context.read<NoteDetailsCubit>().deleteNote(),
+                    )
+                  : _ActionButton(
+                      text: 'Add note',
+                      color: Colors.green,
+                      onPressed: () =>
+                          context.read<NoteDetailsCubit>().addNote(),
+                    ),
+            ],
+          ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.only(
                 left: 24.0, top: 10.0, right: 24.0, bottom: 80.0),
@@ -85,6 +125,8 @@ class _ColorPicker extends StatelessWidget {
         children: colors.map((color) {
           var isSelected = state.note != null && state.note?.color == color;
           return GestureDetector(
+            onTap: () =>
+                context.read<NoteDetailsCubit>().updateColor(color: color),
             child: Container(
               width: 30.0,
               decoration: BoxDecoration(
@@ -100,6 +142,30 @@ class _ColorPicker extends StatelessWidget {
             ),
           );
         }).toList(),
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    Key? key,
+    required this.text,
+    required this.color,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final String text;
+  final Color color;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 17.0, color: color),
       ),
     );
   }
