@@ -1,3 +1,4 @@
+import 'package:blocky_notes/notes/note_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,6 +35,15 @@ class HomeScreen extends StatelessWidget {
               ),
               NotesPage(),
             ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.black,
+            child: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => NoteDetailsPage(),
+              ));
+            },
           ),
         );
       },
