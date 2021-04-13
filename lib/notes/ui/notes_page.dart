@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../user/data/repositories/repositories.dart';
-import '../bloc/notes_bloc/notes_bloc.dart';
-import '../data/repositories/notes_repository.dart';
-import 'note_details_page.dart';
-import 'notes_grid.dart';
+import '../../user/user.dart';
+import '../notes.dart';
 
 class NotesPage extends StatelessWidget {
   @override

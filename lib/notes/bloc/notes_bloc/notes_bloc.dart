@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../user/data/repositories/repositories.dart';
-import '../../data/models/models.dart';
-import '../../data/repositories/notes_repository.dart';
+import '../../../user/user.dart';
+import '../../data/data.dart';
 
 part 'notes_event.dart';
+
 part 'notes_state.dart';
 
 class NotesBloc extends Bloc<NotesEvent, NotesState> {

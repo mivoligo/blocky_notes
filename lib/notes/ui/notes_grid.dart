@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../data/models/models.dart';
+import '../notes.dart';
 
 class NotesGrid extends StatelessWidget {
   const NotesGrid({

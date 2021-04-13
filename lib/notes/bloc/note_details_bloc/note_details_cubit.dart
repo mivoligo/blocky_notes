@@ -2,9 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import '../../../user/blocs/auth_bloc/auth_bloc.dart';
-import '../../data/models/models.dart';
-import '../../data/repositories/notes_repository.dart';
+import '../../../user/user.dart';
+import '../../data/data.dart';
 
 part 'note_details_state.dart';
 

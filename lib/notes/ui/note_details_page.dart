@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../user/blocs/auth_bloc/auth_bloc.dart';
-import '../bloc/note_details_bloc/note_details_cubit.dart';
-import '../data/models/models.dart';
-import '../data/repositories/notes_repository.dart';
+import '../../user/user.dart';
+import '../notes.dart';
 
 class NoteDetailsPage extends StatelessWidget {
   const NoteDetailsPage({Key? key, this.note}) : super(key: key);
