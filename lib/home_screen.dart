@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'notes/note_details_page.dart';
-import 'notes/notes_page.dart';
-import 'user/blocs/auth_bloc/auth_bloc.dart';
+import 'notes/notes.dart';
+import 'theme/theme.dart';
+import 'user/user.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -27,9 +27,9 @@ class HomeScreen extends StatelessWidget {
                       : () {},
                 ),
                 actions: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.brightness_4),
+                  _ThemeSwitcherButton(
+                    isDarkTheme: context.read<ThemeCubit>().state.themeData ==
+                        themeData[AppTheme.darkTheme],
                   ),
                 ],
               ),
@@ -49,5 +49,26 @@ class HomeScreen extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class _ThemeSwitcherButton extends StatelessWidget {
+  const _ThemeSwitcherButton({required this.isDarkTheme});
+
+  final bool isDarkTheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return isDarkTheme
+        ? IconButton(
+            onPressed: () =>
+                context.read<ThemeCubit>().updateTheme(isDarkMode: false),
+            icon: Icon(Icons.brightness_high),
+          )
+        : IconButton(
+            onPressed: () =>
+                context.read<ThemeCubit>().updateTheme(isDarkMode: true),
+            icon: Icon(Icons.brightness_2_sharp),
+          );
   }
 }

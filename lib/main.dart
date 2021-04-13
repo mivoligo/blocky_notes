@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'home_screen.dart';
-import 'notes/data/repositories/notes_repository.dart';
+import 'notes/notes.dart';
 import 'simple_bloc_observer.dart';
-import 'theme/themes.dart';
-import 'user/blocs/auth_bloc/auth_bloc.dart';
-import 'user/data/repositories/auth_repository/auth_repository.dart';
+import 'theme/theme.dart';
+import 'user/user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,12 +33,19 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
             )..add(AppStarted()),
+          ),
+          BlocProvider<ThemeCubit>(
+            create: (context) => ThemeCubit()..loadTheme(),
           )
         ],
-        child: MaterialApp(
-          title: 'Blocky Notes',
-          theme: themeData[AppTheme.lightTheme],
-          home: HomeScreen(),
+        child: BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, state) {
+            return MaterialApp(
+              title: 'Blocky Notes',
+              theme: state.themeData,
+              home: HomeScreen(),
+            );
+          },
         ),
       ),
     );
