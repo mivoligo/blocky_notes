@@ -14,7 +14,7 @@ class ThemeCubit extends Cubit<ThemeState> {
 
   Future<void> loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
-    final isDarkMode = await prefs.getBool(_isDarkModeKey) ?? false;
+    final isDarkMode = await prefs.getBool(_isDarkModeKey) ?? true;
     emit(
       ThemeState(
         themeData: isDarkMode

@@ -84,6 +84,7 @@ class _NoteDetailsViewState extends State<NoteDetailsView> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
+              elevation: 0.0,
               actions: [
                 _isEditing
                     ? _ActionButton(
