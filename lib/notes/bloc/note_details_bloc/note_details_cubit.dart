@@ -19,7 +19,7 @@ class NoteDetailsCubit extends Cubit<NoteDetailsState> {
   final AuthBloc _authBloc;
   final NotesRepository _notesRepository;
 
-  void loadNote({required Note note}) {
+  void loadNote({required Note? note}) {
     emit(state.copyWith(note: note, status: NoteDetailsStatus.initial));
   }
 
@@ -69,7 +69,7 @@ class NoteDetailsCubit extends Cubit<NoteDetailsState> {
     }
   }
 
-  void addNote() async {
+  Future<void> addNote() async {
     emit(NoteDetailsState.submitting(note: state.note!));
     try {
       await _notesRepository.addNote(note: state.note!);
@@ -83,20 +83,21 @@ class NoteDetailsCubit extends Cubit<NoteDetailsState> {
     }
   }
 
-  void saveNote() async {
+  Future<void> saveNote() async {
     emit(NoteDetailsState.submitting(note: state.note!));
     try {
+      print('${state.note} note');
       await _notesRepository.updateNote(note: state.note!);
-    } on Exception catch (_) {
+    } on Exception catch (e) {
       emit(NoteDetailsState.failure(
         note: state.note!,
-        errorMessage: 'Note could not be saved',
+        errorMessage: '$e',
       ));
       emit(state.copyWith(status: NoteDetailsStatus.initial));
     }
   }
 
-  void deleteNote() async {
+  Future<void> deleteNote() async {
     emit(NoteDetailsState.submitting(note: state.note!));
     try {
       await _notesRepository.deleteNote(note: state.note!);

@@ -18,4 +18,10 @@ class SimpleBlocObserver extends BlocObserver {
     print('$error: $stackTrace');
     super.onError(bloc, error, stackTrace);
   }
+
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    print('$change');
+    super.onChange(bloc, change);
+  }
 }

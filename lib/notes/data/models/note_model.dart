@@ -24,6 +24,7 @@ class Note extends Equatable {
 
   NoteEntity toEntity() {
     return NoteEntity(
+      id: id,
       userId: userId,
       content: content,
       color: '${color.value.toRadixString(16)}',
@@ -33,6 +34,7 @@ class Note extends Equatable {
 
   factory Note.fromEntity(NoteEntity entity) {
     return Note(
+      id: entity.id,
       userId: entity.userId,
       content: entity.content,
       color: HexColor(entity.color),

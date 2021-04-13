@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../user/data/repositories/repositories.dart';
 import 'bloc/notes_bloc/notes_bloc.dart';
 import 'data/repositories/notes_repository.dart';
+import 'note_details_page.dart';
 import 'notes_grid.dart';
 
 class NotesPage extends StatelessWidget {
@@ -31,7 +31,14 @@ class NotesView extends StatelessWidget {
           return const SliverToBoxAdapter(
               child: Center(child: CircularProgressIndicator()));
         } else if (state is NotesLoaded) {
-          return NotesGrid(notes: state.notes, onTap: print);
+          return NotesGrid(
+            notes: state.notes,
+            onTap: (note) => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => NoteDetailsPage(note: note),
+              ),
+            ),
+          );
         } else if (state is NotesError) {
           return const SliverToBoxAdapter(
             child: Center(

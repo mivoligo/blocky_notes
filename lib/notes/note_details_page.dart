@@ -7,24 +7,34 @@ import 'data/models/models.dart';
 import 'data/repositories/notes_repository.dart';
 
 class NoteDetailsPage extends StatelessWidget {
+  const NoteDetailsPage({Key? key, this.note}) : super(key: key);
+
+  final Note? note;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<NoteDetailsCubit>(
       create: (context) => NoteDetailsCubit(
         authBloc: context.read<AuthBloc>(),
         notesRepository: context.read<NotesRepository>(),
-      ),
-      child: NoteDetailsView(),
+      )..loadNote(note: note),
+      child: NoteDetailsView(note: note),
     );
   }
 }
 
-class NoteDetailsView extends StatelessWidget {
+class NoteDetailsView extends StatefulWidget {
   NoteDetailsView({Key? key, this.note}) : super(key: key);
 
   final Note? note;
 
-  bool get _isEditing => note != null;
+  @override
+  _NoteDetailsViewState createState() => _NoteDetailsViewState();
+}
+
+class _NoteDetailsViewState extends State<NoteDetailsView> {
+  bool get _isEditing => widget.note != null;
+  final TextEditingController _contentController = TextEditingController();
 
   final List<HexColor> _colors = [
     HexColor('#E74C3C'),
@@ -35,73 +45,90 @@ class NoteDetailsView extends StatelessWidget {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    if (_isEditing) {
+      _contentController.text = widget.note!.content;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NoteDetailsCubit, NoteDetailsState>(
-      listener: (context, state) {
-        if (state.status == NoteDetailsStatus.success) {
-          Navigator.of(context).pop();
-        } else if (state.status == NoteDetailsStatus.failure) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Error'),
-                content: Text(state.errorMessage),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
+    return WillPopScope(
+      onWillPop: () {
+        if (_isEditing) {
+          context.read<NoteDetailsCubit>().saveNote();
         }
+        return Future.value(true);
       },
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            actions: [
-              _isEditing
-                  ? _ActionButton(
-                      text: 'Delete',
-                      color: Colors.red,
-                      onPressed: () =>
-                          context.read<NoteDetailsCubit>().deleteNote(),
-                    )
-                  : _ActionButton(
-                      text: 'Add note',
-                      color: Colors.green,
-                      onPressed: () =>
-                          context.read<NoteDetailsCubit>().addNote(),
+      child: BlocConsumer<NoteDetailsCubit, NoteDetailsState>(
+        listener: (context, state) {
+          if (state.status == NoteDetailsStatus.success) {
+            Navigator.of(context).pop();
+          } else if (state.status == NoteDetailsStatus.failure) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('Error'),
+                  content: Text(state.errorMessage),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text('OK'),
                     ),
-            ],
-          ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.only(
-                left: 24.0, top: 10.0, right: 24.0, bottom: 80.0),
-            child: TextField(
-              autofocus: true,
-              style: const TextStyle(
-                fontSize: 18.0,
-                height: 1.2,
-              ),
-              decoration: const InputDecoration.collapsed(
-                hintText: 'Write whatever you like',
-              ),
-              maxLines: null,
-              textCapitalization: TextCapitalization.sentences,
-              onChanged: (value) => context
-                  .read<NoteDetailsCubit>()
-                  .updateContent(content: value),
+                  ],
+                );
+              },
+            );
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              actions: [
+                _isEditing
+                    ? _ActionButton(
+                        text: 'Delete',
+                        color: Colors.red,
+                        onPressed: () =>
+                            context.read<NoteDetailsCubit>().deleteNote(),
+                      )
+                    : _ActionButton(
+                        text: 'Add note',
+                        color: Colors.green,
+                        onPressed: () =>
+                            context.read<NoteDetailsCubit>().addNote(),
+                      ),
+              ],
             ),
-          ),
-          bottomSheet: _ColorPicker(
-            state: state,
-            colors: _colors,
-          ),
-        );
-      },
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                  left: 24.0, top: 10.0, right: 24.0, bottom: 80.0),
+              child: TextField(
+                autofocus: true,
+                controller: _contentController,
+                style: const TextStyle(
+                  fontSize: 18.0,
+                  height: 1.2,
+                ),
+                decoration: const InputDecoration.collapsed(
+                  hintText: 'Write whatever you like',
+                ),
+                maxLines: null,
+                textCapitalization: TextCapitalization.sentences,
+                onChanged: (value) => context
+                    .read<NoteDetailsCubit>()
+                    .updateContent(content: value),
+              ),
+            ),
+            bottomSheet: _ColorPicker(
+              state: state,
+              colors: _colors,
+            ),
+          );
+        },
+      ),
     );
   }
 }
