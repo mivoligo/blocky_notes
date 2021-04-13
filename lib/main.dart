@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'home_screen.dart';
 import 'notes/data/repositories/notes_repository.dart';
 import 'simple_bloc_observer.dart';
+import 'theme/themes.dart';
 import 'user/blocs/auth_bloc/auth_bloc.dart';
 import 'user/data/repositories/auth_repository/auth_repository.dart';
 
@@ -37,9 +38,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           title: 'Blocky Notes',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+          theme: themeData[AppTheme.lightTheme],
           home: HomeScreen(),
         ),
       ),
