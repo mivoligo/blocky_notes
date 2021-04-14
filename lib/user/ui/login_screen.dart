@@ -50,7 +50,7 @@ class _LoginViewState extends State<LoginView> {
                 builder: (context) {
                   return AlertDialog(
                     title: Text('Error'),
-                    content: Text(state.errorMessage),
+                    content: Text(state.failure.message!),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),

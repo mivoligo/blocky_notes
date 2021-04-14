@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../config/failure.dart';
 import '../../user.dart';
 
 part 'login_state.dart';
@@ -36,9 +37,9 @@ class LoginCubit extends Cubit<LoginState> {
       );
       _authBloc.add(Login());
       emit(state.copyWith(status: LoginStatus.success));
-    } on Exception catch (e) {
+    } on Failure catch (e) {
       emit(state.copyWith(
-        errorMessage: '$e',
+        failure: e,
         status: LoginStatus.error,
       ));
     }
@@ -48,16 +49,15 @@ class LoginCubit extends Cubit<LoginState> {
     if (!state.isFormValid || state.status == LoginStatus.submitting) return;
     emit(state.copyWith(status: LoginStatus.submitting));
     try {
-      _authRepository.signupWithEmailAndPassword(
+      await _authRepository.signupWithEmailAndPassword(
         email: state.email,
         password: state.password,
       );
       _authBloc.add(Login());
       emit(state.copyWith(status: LoginStatus.success));
-    } on Exception catch (e) {
-      print('======  in ========');
+    } on Failure catch (e) {
       emit(state.copyWith(
-        errorMessage: '$e',
+        failure: e,
         status: LoginStatus.error,
       ));
     }

@@ -7,13 +7,13 @@ class LoginState extends Equatable {
     required this.email,
     required this.password,
     required this.status,
-    required this.errorMessage,
+    required this.failure,
   });
 
   final String email;
   final String password;
   final LoginStatus status;
-  final String errorMessage;
+  final Failure failure;
 
   bool get isEmailValid => email.contains('@'); // just for testing
 
@@ -22,14 +22,14 @@ class LoginState extends Equatable {
   bool get isFormValid => isEmailValid && isPasswordValid;
 
   @override
-  List<Object> get props => [email, password, status, errorMessage];
+  List<Object> get props => [email, password, status, failure];
 
   factory LoginState.initial() {
     return LoginState(
       email: '',
       password: '',
       status: LoginStatus.initial,
-      errorMessage: '',
+      failure: const Failure(),
     );
   }
 
@@ -37,13 +37,13 @@ class LoginState extends Equatable {
     String? email,
     String? password,
     LoginStatus? status,
-    String? errorMessage,
+    Failure? failure,
   }) {
     return LoginState(
       email: email ?? this.email,
       password: password ?? this.password,
       status: status ?? this.status,
-      errorMessage: errorMessage ?? this.errorMessage,
+      failure: failure ?? this.failure,
     );
   }
 }

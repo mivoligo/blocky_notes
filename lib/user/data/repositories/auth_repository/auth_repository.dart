@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:flutter/services.dart';
 
+import '../../../../config/failure.dart';
 import '../../../../config/paths.dart';
 import '../../entities/entities.dart';
 import '../../models/models.dart';
@@ -17,14 +19,20 @@ class AuthRepository extends BaseAuthRepository {
   final auth.FirebaseAuth _firebaseAuth;
 
   Future<User> _firebaseUserToUser(auth.User user) async {
-    final userDoc =
-        await _firestore.collection(Paths.users).doc(user.uid).get();
+    try {
+      final userDoc =
+          await _firestore.collection(Paths.users).doc(user.uid).get();
 
-    if (userDoc.exists) {
-      final user = User.fromEntity(UserEntity.fromSnapshot(userDoc));
-      return user;
+      if (userDoc.exists) {
+        final user = User.fromEntity(UserEntity.fromSnapshot(userDoc));
+        return user;
+      }
+      return User(id: user.uid, email: '');
+    } on auth.FirebaseAuthException catch (e) {
+      throw Failure(code: e.code, message: e.message);
+    } on PlatformException catch (e) {
+      throw Failure(code: e.code, message: e.message);
     }
-    return User(id: user.uid, email: '');
   }
 
   @override
@@ -38,16 +46,22 @@ class AuthRepository extends BaseAuthRepository {
     required String email,
     required String password,
   }) async {
-    final currentUser = await _firebaseAuth.currentUser;
-    final authCredential =
-        auth.EmailAuthProvider.credential(email: email, password: password);
-    final authResult = await currentUser?.linkWithCredential(authCredential);
-    final user = await _firebaseUserToUser(authResult!.user!);
-    _firestore
-        .collection(Paths.users)
-        .doc(user.id)
-        .set(user.toEntity().toDocument());
-    return user;
+    try {
+      final currentUser = await _firebaseAuth.currentUser;
+      final authCredential =
+          auth.EmailAuthProvider.credential(email: email, password: password);
+      final authResult = await currentUser?.linkWithCredential(authCredential);
+      final user = await _firebaseUserToUser(authResult!.user!);
+      _firestore
+          .collection(Paths.users)
+          .doc(user.id)
+          .set(user.toEntity().toDocument());
+      return user;
+    } on auth.FirebaseAuthException catch (e) {
+      throw Failure(code: e.code, message: e.message);
+    } on PlatformException catch (e) {
+      throw Failure(code: e.code, message: e.message);
+    }
   }
 
   @override
@@ -55,9 +69,15 @@ class AuthRepository extends BaseAuthRepository {
     required String email,
     required String password,
   }) async {
-    final authResult = await _firebaseAuth.signInWithEmailAndPassword(
-        email: email, password: password);
-    return await _firebaseUserToUser(authResult.user!);
+    try {
+      final authResult = await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return await _firebaseUserToUser(authResult.user!);
+    } on auth.FirebaseAuthException catch (e) {
+      throw Failure(code: e.code, message: e.message);
+    } on PlatformException catch (e) {
+      throw Failure(code: e.code, message: e.message);
+    }
   }
 
   @override
