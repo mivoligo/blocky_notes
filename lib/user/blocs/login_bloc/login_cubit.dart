@@ -38,4 +38,22 @@ class LoginCubit extends Cubit<LoginState> {
       ));
     }
   }
+
+  Future<void> signupWithEmailAndPassword() async {
+    if (!state.isFormValid || state.status == LoginStatus.submitting) return;
+    emit(state.copyWith(status: LoginStatus.submitting));
+    try {
+      _authRepository.signupWithEmailAndPassword(
+        email: state.email,
+        password: state.password,
+      );
+      _authBloc.add(Login());
+      emit(state.copyWith(status: LoginStatus.success));
+    } on PlatformException catch (e) {
+      emit(state.copyWith(
+        errorMessage: e.message,
+        status: LoginStatus.error,
+      ));
+    }
+  }
 }

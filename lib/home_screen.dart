@@ -24,7 +24,11 @@ class HomeScreen extends StatelessWidget {
                       : Icon(Icons.account_circle),
                   onPressed: () => state is Authenticated
                       ? context.read<AuthBloc>().add(Logout())
-                      : () {},
+                      : Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => LoginScreen(),
+                          ),
+                        ),
                 ),
                 actions: [
                   _ThemeSwitcherButton(
