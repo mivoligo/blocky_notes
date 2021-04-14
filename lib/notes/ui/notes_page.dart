@@ -1,23 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../user/user.dart';
 import '../notes.dart';
 
 class NotesPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => NotesBloc(
-          authRepository: context.read<AuthRepository>(),
-          notesRepository: context.read<NotesRepository>())
-        ..add(FetchNotes()),
-      child: NotesView(),
-    );
-  }
-}
-
-class NotesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotesBloc, NotesState>(

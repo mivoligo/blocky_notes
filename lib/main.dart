@@ -36,7 +36,12 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<ThemeCubit>(
             create: (context) => ThemeCubit()..loadTheme(),
-          )
+          ),
+          BlocProvider(
+            create: (context) => NotesBloc(
+                authRepository: context.read<AuthRepository>(),
+                notesRepository: context.read<NotesRepository>()),
+          ),
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: (context, state) {

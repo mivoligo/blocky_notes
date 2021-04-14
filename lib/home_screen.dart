@@ -8,7 +8,10 @@ import 'user/user.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        context.read<NotesBloc>().add(FetchNotes());
+      },
       builder: (context, state) {
         return Scaffold(
           body: CustomScrollView(
