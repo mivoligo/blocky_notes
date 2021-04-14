@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/services.dart';
 
 import '../../user.dart';
 
@@ -17,9 +16,15 @@ class LoginCubit extends Cubit<LoginState> {
   final AuthBloc _authBloc;
   final AuthRepository _authRepository;
 
-  void emailChanged(String value) => emit(state.copyWith(email: value));
+  void emailChanged(String value) => emit(state.copyWith(
+        email: value,
+        status: LoginStatus.initial,
+      ));
 
-  void passwordChanged(String value) => emit(state.copyWith(password: value));
+  void passwordChanged(String value) => emit(state.copyWith(
+        password: value,
+        status: LoginStatus.initial,
+      ));
 
   Future<void> loginWithEmailAndPassword() async {
     if (!state.isFormValid || state.status == LoginStatus.submitting) return;
@@ -31,9 +36,9 @@ class LoginCubit extends Cubit<LoginState> {
       );
       _authBloc.add(Login());
       emit(state.copyWith(status: LoginStatus.success));
-    } on PlatformException catch (e) {
+    } on Exception catch (e) {
       emit(state.copyWith(
-        errorMessage: e.message,
+        errorMessage: '$e',
         status: LoginStatus.error,
       ));
     }
@@ -49,9 +54,10 @@ class LoginCubit extends Cubit<LoginState> {
       );
       _authBloc.add(Login());
       emit(state.copyWith(status: LoginStatus.success));
-    } on PlatformException catch (e) {
+    } on Exception catch (e) {
+      print('======  in ========');
       emit(state.copyWith(
-        errorMessage: e.message,
+        errorMessage: '$e',
         status: LoginStatus.error,
       ));
     }

@@ -15,7 +15,11 @@ class LoginState extends Equatable {
   final LoginStatus status;
   final String errorMessage;
 
-  bool get isFormValid => email.isNotEmpty && password.isNotEmpty;
+  bool get isEmailValid => email.contains('@'); // just for testing
+
+  bool get isPasswordValid => password.length > 5;
+
+  bool get isFormValid => isEmailValid && isPasswordValid;
 
   @override
   List<Object> get props => [email, password, status, errorMessage];

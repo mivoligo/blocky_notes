@@ -45,14 +45,16 @@ class AuthRepository extends BaseAuthRepository {
     final user = await _firebaseUserToUser(authResult!.user!);
     _firestore
         .collection(Paths.users)
-        .doc(authResult.user?.uid)
+        .doc(user.id)
         .set(user.toEntity().toDocument());
     return user;
   }
 
   @override
-  Future<User> loginWithEmailAndPassword(
-      {required String email, required String password}) async {
+  Future<User> loginWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     final authResult = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     return await _firebaseUserToUser(authResult.user!);
