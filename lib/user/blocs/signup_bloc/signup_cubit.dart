@@ -1,16 +1,21 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/services.dart';
 
 import '../../user.dart';
 
 part 'signup_state.dart';
 
 class SignupCubit extends Cubit<SignupState> {
-  SignupCubit({required AuthRepository authRepository})
-      : _authRepository = authRepository,
+  SignupCubit({
+    required AuthBloc authBloc,
+    required AuthRepository authRepository,
+  })   : _authBloc = authBloc,
+        _authRepository = authRepository,
         super(SignupState.initial());
 
   final AuthRepository _authRepository;
+  final AuthBloc _authBloc;
 
   void emailChanged(String value) => emit(state.copyWith(email: value));
 
@@ -24,9 +29,13 @@ class SignupCubit extends Cubit<SignupState> {
         email: state.email,
         password: state.password,
       );
+      _authBloc.add(Login());
       emit(state.copyWith(status: SignupStatus.success));
-    } on Exception catch (e) {
-      emit(state.copyWith(errorMessage: '$e', status: SignupStatus.failure));
+    } on PlatformException catch (e) {
+      emit(state.copyWith(
+        errorMessage: e.message,
+        status: SignupStatus.failure,
+      ));
     }
   }
 }

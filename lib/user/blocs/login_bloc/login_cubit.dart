@@ -1,15 +1,20 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/services.dart';
 
 import '../../user.dart';
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit({required AuthRepository authRepository})
-      : _authRepository = authRepository,
+  LoginCubit({
+    required AuthBloc authBloc,
+    required AuthRepository authRepository,
+  })   : _authBloc = authBloc,
+        _authRepository = authRepository,
         super(LoginState.initial());
 
+  final AuthBloc _authBloc;
   final AuthRepository _authRepository;
 
   void emailChanged(String value) => emit(state.copyWith(email: value));
@@ -24,8 +29,13 @@ class LoginCubit extends Cubit<LoginState> {
         email: state.email,
         password: state.password,
       );
-    } on Exception catch (e) {
-      emit(state.copyWith(errorMessage: '$e', status: LoginStatus.error));
+      _authBloc.add(Login());
+      emit(state.copyWith(status: LoginStatus.success));
+    } on PlatformException catch (e) {
+      emit(state.copyWith(
+        errorMessage: e.message,
+        status: LoginStatus.error,
+      ));
     }
   }
 }
